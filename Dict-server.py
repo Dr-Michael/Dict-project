@@ -34,6 +34,28 @@ class Handle:
             self.c.send(b"OK")
         else:
             self.c.send(b"Error")
+    def sign_in(self):
+        self.c.send(b"OK")
+        data = self.c.recv(1024)
+        name = data.decode().split(" ")[0]
+        passwd = data.decode().split(" ")[1]
+        if Dict_mysql(c).varify(name,passwd):
+            self.c.send(b"OK")
+        else:
+            self.c.send(b"Error")
+
+    def look(self):
+        self.c.send(b"OK")
+        data = self.c.recv(1024).decode()
+        comment = Dict_mysql(c).look_for(data)
+
+        if comment:
+            print(comment)
+            self.c.send(comment.encode())
+        else:
+            self.c.send(b"Error")
+
+
 
 
 
@@ -59,8 +81,13 @@ while True:
                 print("客户端已退出")
                 os._exit(0)
             print(data)
+            #   实现注册功能
             if data[0] == "R":
                 Handle(c).add_user()
+            elif data[0] == "I":
+                Handle(c).sign_in()
+            elif data[0] == "L":
+                Handle(c).look()
 
 
 
