@@ -3,6 +3,7 @@
 """
 
 import socket
+import sys
 
 IP = "127.0.0.1"
 PORT = 8080
@@ -38,7 +39,10 @@ while True:
     1  注册
     2  登录
     """)
-    msg = input("请输入选项:")
+    try:
+        msg = input("请输入选项:")
+    except KeyboardInterrupt:
+        sys.exit("客户端关闭")
     if msg == "1":
         c.send(b"R " + msg.encode())
         Request(c).register()

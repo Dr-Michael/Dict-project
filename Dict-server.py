@@ -55,6 +55,9 @@ while True:
         print("Client is:", c.getpeername)
         while True:
             data = c.recv(1024).decode()
+            if not data:
+                print("客户端已退出")
+                os._exit(0)
             print(data)
             if data[0] == "R":
                 Handle(c).add_user()
